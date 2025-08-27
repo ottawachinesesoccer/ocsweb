@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- Set default language to English -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Ensures proper rendering and touch zooming for all devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-key="title">Ottawa Chinese Soccer Club</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <div><a href="index.html" class="logo-link">
+        <img src="images/ocs-logo.png" alt="Ottawa Chinese Soccer Club Logo" class="header-logo">
+        </a></div>
+        <div class="logo" data-lang-key="club_name">Soccer Club</div>
+        <nav class="main-nav">
+            <!-- Hamburger menu for mobile -->
+            <button class="hamburger" id="hamburger-menu" aria-label="Menu">
+                &#9776; <!-- Hamburger icon -->
+            </button>
+            <ul id="nav-links">
+                <li><a href="index.html" data-lang-key="nav_home">Home</a></li>
+                <li><a href="club.html" data-lang-key="nav_club">Club</a></li>
+                <li><a href="indoor.html" data-lang-key="nav_indoor">Indoor</a></li>
+                <li><a href="outdoor.html" data-lang-key="nav_outdoor">Outdoor</a></li>
+                <li><a href="bbq.html" data-lang-key="nav_bbq">BBQ</a></li>
+                <li><a href="contact.html" data-lang-key="nav_contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="language-switcher">
+            <button id="lang-en">EN</button>
+            <span>/</span>
+            <button id="lang-zh">中文</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="home">
+            <h1 data-lang-key="welcome_title">Welcome to Our Club!</h1>
+            <p data-lang-key="welcome_text">
+                This is the official website for our soccer club. Here you can find information
+                about our teams, schedules for indoor and outdoor seasons, and details about
+                our special events like the annual BBQ.
+            </p>
+        </section>
+
+        <section class="slideshow-container">
+            <h2 data-lang-key="media_gallery_title">Our Happy Moments</h2>
+            <div class="slideshow">
+                <!-- The 'active' class makes the first item visible on page load -->
+                <img src="images/all-members-1-small.jpg" alt="Team Photo" class="slide-item active">
+                <img src="images/all-members-2-small.jpg" alt="Team Photo" class="slide-item">
+                <img src="images/bbq2024/teams/team1.jpg" alt="Team Photo" class="slide-item">
+                <img src="images/bbq2024/teams/team2.jpg" alt="Team Photo" class="slide-item">
+                <img src="images/bbq2024/teams/team4.jpg" alt="Team Photo" class="slide-item">
+                <img src="images/bbq2024/teams/team6.jpg" alt="Team Photo" class="slide-item">
+                <img src="images/bbq2025/friendshipcup/cup1.jpg" alt="Team Photo" class="slide-item">
+                <img src="images/bbq2025/friendshipcup/cup2.jpg" alt="Team Photo" class="slide-item">
+                <!-- For videos, `muted` and `playsinline` are crucial for autoplay to work in most browsers -->
+                <video src="images/bbq2025/drone/bbq-drone1.mp4" class="slide-item" muted playsinline loop></video>
+                <video src="images/bbq2025/drone/bbq-drone2.mp4" class="slide-item" muted playsinline loop></video>
+                <!-- NOTE: Make sure you create `images/gallery/` and `videos/` folders -->
+                <!-- and place your media files inside them with the correct names. -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Ottawa Chinese Soccer Club. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript file should be loaded at the end -->
+    <script src="js/main.js"></script>
+
+</body>
+</html>
