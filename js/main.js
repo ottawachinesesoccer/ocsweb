@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nav_drone: "航拍",
             nav_friendshipcup: "友谊杯",
             indoor_title: "室内足球",
-            indoor_text: "每年的冬季室内足球从11月初开始，到此年4月底结束。我们在Superdome at Ben Franklin Park租场。2025年场地预定如下：",
+            indoor_text: "每年的冬季室内足球从11月初开始，到次年4月底结束。我们在Superdome at Ben Franklin Park租场。2025年场地预定如下：",
             outdoor_title: "室外足球",
             outdoor_text: "每年5月开始，我们转到室外活动。室外场地为城市公共公园场地，加入免费。以下是渥太华华人组织的室外踢球信息：",
 
