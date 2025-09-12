@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
             nav_indoor: "Indoor",
             nav_outdoor: "Outdoor",
             nav_bbq: "BBQ",
+            nav_community: "Community",
+            community_title: "Community",
+            community_text: "The following Chinese communities look forward to your attention:",
             welcome_title: "Welcome to Our Club!",
             welcome_text: "This is the official website for our soccer club. Here you can find information about our teams, schedules for indoor and outdoor seasons, and details about our special events like the annual BBQ.",
             nav_contact: "Contact",
@@ -59,6 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
             nav_indoor: "室内",
             nav_outdoor: "室外",
             nav_bbq: "烧烤",
+            nav_community: "社区",
+            community_title: "社区",
+            community_text: "如下华人社区期待您的关注：",
             welcome_title: "欢迎来到我们的俱乐部！",
             welcome_text: "这是我们足球俱乐部的官方网站。在这里，您可以找到关于我们球队的信息、室内和室外赛季的赛程安排，以及年度烧烤等特别活动的详细信息。",
             nav_contact: "联系我们",
@@ -456,8 +462,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     title: 'Our 2023 Sponsors',
                     subtitle: 'A big thank you to our generous sponsors!',
                     files: [ 
-                        'images/bbq2023/sponsor/mary.jpg', 
-                        'images/bbq2023/sponsor/jeff.jpg'
+                        'images/bbq2023/sponsor/jeff.jpg',
+                        'images/bbq2023/sponsor/mary.jpg'
                     ]
                 },
                 'individual': {
@@ -610,5 +616,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
-
-
