@@ -48,6 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
             indoor_text: "Winter indoor soccer runs from early November to the end of April. We rent courts at the Superdome at Ben Franklin Park. The 2025 venue reservations are as follows:",
             outdoor_title: "Outdoor Season",
             outdoor_text: "Starting in May every year, we move to outdoor activities. The outdoor venues are city public parks and admission is free. The following is the information about outdoor football activities organized by Chinese organizations in Ottawa:",
+            greenbank_video: "Greenbank Reunion Video",
+            greenbank_slideshow: "Reunion Photo Gallery",
+            greenbank_button: "Greenbank Reunion",
+            greenbank_title: "Greenbank Reunion",
         },
         zh: {
             title: "渥太华华人足球俱乐部",
@@ -94,7 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
             indoor_text: "每年的冬季室内足球从11月初开始，到次年4月底结束。我们在Superdome at Ben Franklin Park租场。2025年场地预定如下：",
             outdoor_title: "室外足球",
             outdoor_text: "每年5月开始，我们转到室外活动。室外场地为城市公共公园场地，加入免费。以下是渥太华华人组织的室外踢球信息：",
-
+            greenbank_video: "绿岸聚会视频",
+            greenbank_slideshow: "聚会照片集",
+            greenbank_button: "绿岸聚会",
+            greenbank_title: "绿岸聚会",
         }
     };
 
@@ -148,6 +155,21 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks.classList.remove('active');
         }
     });
+
+    // --- SLIDESHOW / VIDEO SUPPORT ---
+    const greenbankSlides = document.querySelectorAll('#greenbank img');
+    let gbIndex = 0;
+    if (greenbankSlides.length) {
+        // hide all except first
+        greenbankSlides.forEach((img, i) => {
+            if (i !== 0) img.style.display = 'none';
+        });
+        setInterval(() => {
+            greenbankSlides[gbIndex].style.display = 'none';
+            gbIndex = (gbIndex + 1) % greenbankSlides.length;
+            greenbankSlides[gbIndex].style.display = 'block';
+        }, 3000);
+    }
 
     // --- BBQ 2025 Page Content Loader ---
     const bbqNavContainer = document.querySelector('.bbq-nav');
