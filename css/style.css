@@ -188,6 +188,12 @@ footer {
     margin-bottom: 1.5rem;
 }
 
+/* Language-specific visibility */
+body.lang-en .lang-zh,
+body.lang-zh .lang-en {
+    display: none !important;
+}
+
 .bbq-nav ul {
     list-style: none;
     display: flex;

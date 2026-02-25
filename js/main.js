@@ -119,6 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Save the user's preference in local storage
         localStorage.setItem('language', lang);
+
+        // Add a class to the body so CSS can hide/show language-specific blocks
+        document.body.classList.toggle('lang-en', lang === 'en');
+        document.body.classList.toggle('lang-zh', lang === 'zh');
     };
 
     langEnButton.addEventListener('click', () => setLanguage('en'));
