@@ -611,6 +611,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const showNextItem = () => {
             if (mediaItems.length < 2) return; // Don't run if there's only one item
 
+            // Ensure currentItemIndex is within bounds
+            if (currentItemIndex >= mediaItems.length) {
+                currentItemIndex = 0; // Reset to the first item if out of bounds
+            }
+
             const currentItem = mediaItems[currentItemIndex];
 
             // If the current item is a video, pause it and reset its time
@@ -618,7 +623,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentItem.pause();
                 currentItem.currentTime = 0;
             }
-            currentItem.classList.remove('active');
+            if (currentItem) {
+                currentItem.classList.remove('active');
+            }
 
             // Calculate the index of the next item, looping back to the start
             currentItemIndex = (currentItemIndex + 1) % mediaItems.length;
@@ -634,6 +641,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         };
+        
+        // Initially set the first item to active
+        if (mediaItems.length > 0)
+            mediaItems[0].classList.add('active');
 
         // Start the slideshow interval if there is more than one item
         if (mediaItems.length > 1) {
