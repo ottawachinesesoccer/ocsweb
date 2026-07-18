@@ -412,8 +412,9 @@ body.lang-zh .lang-en {
     display: none;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    /* Makes media cover the container without distortion */
+    object-fit: contain;
+    /* Scales media to fit fully inside the box without cropping;
+       the black background above letterboxes the empty space. */
     position: absolute;
     top: 0;
     left: 0;
@@ -423,6 +424,111 @@ body.lang-zh .lang-en {
 /* Show the active slide */
 .slideshow .slide-item.active {
     display: block;
+}
+
+/* Photos can be clicked to view full size; videos keep native controls */
+.slideshow img.slide-item {
+    cursor: zoom-in;
+}
+
+/* Pause/Play button on the slideshow */
+.slideshow-pause-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.slideshow-pause-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Prev/Next buttons: only shown once the slideshow is paused, so the user
+   can manually step through photos. */
+.slideshow-nav-btn {
+    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.slideshow-nav-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.slideshow-prev-btn {
+    left: 12px;
+}
+
+.slideshow-next-btn {
+    right: 12px;
+}
+
+.slideshow.paused .slideshow-nav-btn {
+    display: flex;
+}
+
+/* Lightbox: click a photo in a slideshow to view it at full size */
+.lightbox-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+}
+
+.lightbox-overlay.active {
+    display: flex;
+}
+
+.lightbox-overlay .lightbox-img {
+    max-width: 92vw;
+    max-height: 92vh;
+    object-fit: contain;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 2.5rem;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
 }
 
 /* A simple fade-in animation for the transition */

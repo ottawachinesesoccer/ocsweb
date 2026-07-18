@@ -54,6 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
             greenbank_slideshow: "Reunion Photo Gallery",
             greenbank_button: "Greenbank Reunion",
             greenbank_title: "Greenbank Reunion",
+            memory_button: "Memorable Photo",
+            memory_title: "Memorable Photo",
         },
         zh: {
             title: "渥太华华人足球俱乐部",
@@ -106,6 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
             greenbank_slideshow: "聚会照片集",
             greenbank_button: "绿岸聚会",
             greenbank_title: "绿岸聚会",
+            memory_button: "难忘瞬间",
+            memory_title: "难忘瞬间",
         }
     };
 
@@ -159,6 +163,143 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks.classList.remove('active');
         }
     });
+
+    // --- LIGHTBOX (click a photo in a slideshow to view it at full size) ---
+    const lightboxOverlay = document.createElement('div');
+    lightboxOverlay.className = 'lightbox-overlay';
+    lightboxOverlay.innerHTML = `
+        <span class="lightbox-close" aria-label="Close">&times;</span>
+        <img class="lightbox-img" src="" alt="">
+    `;
+    document.body.appendChild(lightboxOverlay);
+    const lightboxImg = lightboxOverlay.querySelector('.lightbox-img');
+
+    const openLightbox = (src, alt) => {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || '';
+        lightboxOverlay.classList.add('active');
+    };
+
+    const closeLightbox = () => {
+        lightboxOverlay.classList.remove('active');
+        lightboxImg.src = '';
+    };
+
+    // Clicking anywhere on the overlay (backdrop, image, or the X) closes it
+    lightboxOverlay.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
+
+    // --- Reusable auto-advancing slideshow with a pause/play button and
+    //     click-to-enlarge on photos. Used by the homepage "Moments" gallery,
+    //     memory.html, and each BBQ year's Awards/Meal/Games/Sponsor galleries. ---
+    const initSlideshow = (container) => {
+        const mediaItems = container.querySelectorAll('.slide-item');
+        if (mediaItems.length === 0) return null;
+
+        const slideDuration = 4000; // 4 seconds
+        let currentItemIndex = 0;
+        let intervalId = null;
+        let isPaused = false;
+
+        const pauseBtn = document.createElement('button');
+        pauseBtn.type = 'button';
+        pauseBtn.className = 'slideshow-pause-btn';
+        pauseBtn.textContent = '⏸'; // pause icon
+        pauseBtn.setAttribute('aria-label', 'Pause slideshow');
+        container.appendChild(pauseBtn);
+
+        // Prev/Next buttons only become usable once the slideshow is paused,
+        // so the user can manually step through photos.
+        const prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.className = 'slideshow-nav-btn slideshow-prev-btn';
+        prevBtn.innerHTML = '&#10094;';
+        prevBtn.setAttribute('aria-label', 'Previous photo');
+        container.appendChild(prevBtn);
+
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.className = 'slideshow-nav-btn slideshow-next-btn';
+        nextBtn.innerHTML = '&#10095;';
+        nextBtn.setAttribute('aria-label', 'Next photo');
+        container.appendChild(nextBtn);
+
+        mediaItems.forEach((item) => {
+            if (item.tagName === 'IMG') {
+                item.addEventListener('click', () => openLightbox(item.src, item.alt));
+            }
+        });
+
+        const playIfVideo = (item) => {
+            if (item.tagName === 'VIDEO') {
+                item.play().catch(error => {
+                    console.warn('Video autoplay was prevented by the browser:', error);
+                });
+            }
+        };
+
+        // Moves to the slide at currentItemIndex + step (step can be +1 or -1),
+        // wrapping around in either direction.
+        const goToItem = (step) => {
+            const currentItem = mediaItems[currentItemIndex];
+            if (currentItem.tagName === 'VIDEO') {
+                currentItem.pause();
+                currentItem.currentTime = 0;
+            }
+            currentItem.classList.remove('active');
+
+            currentItemIndex = (currentItemIndex + step + mediaItems.length) % mediaItems.length;
+
+            const nextItem = mediaItems[currentItemIndex];
+            nextItem.classList.add('active');
+            playIfVideo(nextItem);
+        };
+
+        const showNextItem = () => goToItem(1);
+
+        const start = () => {
+            if (mediaItems.length > 1 && !intervalId) {
+                intervalId = setInterval(showNextItem, slideDuration);
+            }
+        };
+
+        const stop = () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        };
+
+        mediaItems[0].classList.add('active');
+        playIfVideo(mediaItems[0]);
+        start();
+
+        pauseBtn.addEventListener('click', () => {
+            isPaused = !isPaused;
+            container.classList.toggle('paused', isPaused);
+            if (isPaused) {
+                stop();
+                pauseBtn.textContent = '▶'; // play icon
+                pauseBtn.setAttribute('aria-label', 'Play slideshow');
+            } else {
+                start();
+                pauseBtn.textContent = '⏸';
+                pauseBtn.setAttribute('aria-label', 'Pause slideshow');
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (isPaused) goToItem(-1);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (isPaused) goToItem(1);
+        });
+
+        return { stop };
+    };
 
     // --- SLIDESHOW / VIDEO SUPPORT ---
     const greenbankSlides = document.querySelectorAll('#greenbank img');
@@ -558,7 +699,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const bbqContentData = bbqDataByYear[year];
 
+        // Tracks the currently running gallery slideshow so it can be stopped
+        // when the user clicks a different menu item (Awards, Meal, Games, ...).
+        let activeSlideshowController = null;
+
         const renderSlideshow = (data) => {
+            if (activeSlideshowController) {
+                activeSlideshowController.stop();
+                activeSlideshowController = null;
+            }
+
             if (!data || !data.files || data.files.length === 0) {
                 contentContainer.innerHTML = `<h2>${data.title || 'Content'}</h2><p>Coming soon!</p>`;
                 return;
@@ -567,52 +717,25 @@ document.addEventListener('DOMContentLoaded', () => {
             let galleryHtml = `
                 <h2>${data.title}</h2>
                 ${data.subtitle ? `<h4>${data.subtitle}</h4>` : ''}
-                <div class="slideshow-container">
+                <div class="slideshow">
             `;
 
             data.files.forEach((file, index) => {
-                galleryHtml += `<div class="slide fade">`;
-                galleryHtml += `<div class="slide-number">${index + 1} / ${data.files.length}</div>`;
                 if (file.toLowerCase().endsWith('.mp4')) {
-                    galleryHtml += `<video src="${file}" controls></video>`;
+                    galleryHtml += `<video src="${file}" class="slide-item" controls muted playsinline loop></video>`;
                 } else {
-                    galleryHtml += `<img src="${file}" alt="${data.title} photo ${index + 1}">`;
+                    galleryHtml += `<img src="${file}" alt="${data.title} photo ${index + 1}" class="slide-item">`;
                 }
-                galleryHtml += `</div>`;
             });
 
-            galleryHtml += `
-                    <a class="prev">&#10094;</a>
-                    <a class="next">&#10095;</a>
-                </div>
-            `;
+            galleryHtml += `</div>`;
 
             contentContainer.innerHTML = galleryHtml;
 
-            // --- Slideshow Logic ---
-            let slideIndex = 1;
-            const slides = contentContainer.querySelectorAll('.slide');
-            const videos = contentContainer.querySelectorAll('video');
-            const prev = contentContainer.querySelector('.prev');
-            const next = contentContainer.querySelector('.next');
-
-            const showSlides = (n) => {
-                if (n > slides.length) { slideIndex = 1; }
-                if (n < 1) { slideIndex = slides.length; }
-                // Pause all videos when changing slides
-                videos.forEach(video => video.pause());
-                slides.forEach(slide => slide.style.display = "none");
-                slides[slideIndex - 1].style.display = "block";
+            const slideshowEl = contentContainer.querySelector('.slideshow');
+            if (slideshowEl) {
+                activeSlideshowController = initSlideshow(slideshowEl);
             }
-
-            showSlides(slideIndex);
-
-            const plusSlides = (n) => {
-                showSlides(slideIndex += n);
-            }
-
-            prev.addEventListener('click', () => plusSlides(-1));
-            next.addEventListener('click', () => plusSlides(1));
         };
 
         bbqNavContainer.addEventListener('click', (e) => {
@@ -627,55 +750,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // --- Automatic Media Slideshow ---
-    const slideshowContainer = document.querySelector('.slideshow');
-    if (slideshowContainer) {
-        const mediaItems = slideshowContainer.querySelectorAll('.slide-item');
-        let currentItemIndex = 0;
-        const slideDuration = 4000; // 4 seconds
-
-        const showNextItem = () => {
-            if (mediaItems.length < 2) return; // Don't run if there's only one item
-
-            // Ensure currentItemIndex is within bounds
-            if (currentItemIndex >= mediaItems.length) {
-                currentItemIndex = 0; // Reset to the first item if out of bounds
-            }
-
-            const currentItem = mediaItems[currentItemIndex];
-
-            // If the current item is a video, pause it and reset its time
-            if (currentItem.tagName === 'VIDEO') {
-                currentItem.pause();
-                currentItem.currentTime = 0;
-            }
-            if (currentItem) {
-                currentItem.classList.remove('active');
-            }
-
-            // Calculate the index of the next item, looping back to the start
-            currentItemIndex = (currentItemIndex + 1) % mediaItems.length;
-
-            const nextItem = mediaItems[currentItemIndex];
-            nextItem.classList.add('active');
-
-            // If the next item is a video, try to play it
-            if (nextItem.tagName === 'VIDEO') {
-                // Autoplay is more likely to work when the video is muted
-                nextItem.play().catch(error => {
-                    console.warn("Video autoplay was prevented by the browser:", error);
-                });
-            }
-        };
-        
-        // Initially set the first item to active
-        if (mediaItems.length > 0)
-            mediaItems[0].classList.add('active');
-
-        // Start the slideshow interval if there is more than one item
-        if (mediaItems.length > 1) {
-            setInterval(showNextItem, slideDuration);
-        }
+    // --- Automatic Media Slideshow (homepage "Moments" gallery / memory.html) ---
+    const staticSlideshow = document.querySelector('.slideshow');
+    if (staticSlideshow) {
+        initSlideshow(staticSlideshow);
     }
 
 });
