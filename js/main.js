@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'sponsor': {
                     title: 'Our Sponsors',
                     subtitle: 'A big thank you to our generous sponsors!',
-                    files: [ 'images/bbq2026/sponsor/wangjia.png', 'images/bbq2026/sponsor/jackylawyer.jpg', 'images/bbq2026/sponsor/Lyon-building.png',  'images/bbq2026/sponsor/mary-ice-wine.png', 'images/bbq2026/sponsor/mary.jpg', 'images/bbq2026/sponsor/jeff.jpg','images/bbq2026/sponsor/mobilenet1.jpg', 'images/bbq2026/sponsor/mobilenet2.png', 'images/bbq2026/sponsor/mobilenet3.JPG', 'images/bbq2026/sponsor/zhudao.jpg', 'images/bbq2026/sponsor/bluewhale.jpg' ]
+                    files: [ 'images/bbq2026/sponsor/wangjia.png', 'images/bbq2026/sponsor/jackylawyer.jpg', 'images/bbq2026/sponsor/Lyon-building.jpg', 'images/bbq2026/sponsor/mary-ice-wine.png', 'images/bbq2026/sponsor/mary.jpg', 'images/bbq2026/sponsor/jeff.jpg','images/bbq2026/sponsor/mobilenet1.jpg', 'images/bbq2026/sponsor/mobilenet2.png', 'images/bbq2026/sponsor/mobilenet3.JPG', 'images/bbq2026/sponsor/zhudao.jpg', 'images/bbq2026/sponsor/bluewhale.jpg' ]
                 }
             },
             '2025': {
